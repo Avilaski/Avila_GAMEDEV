@@ -7,10 +7,25 @@ public class SpeedPanel : MonoBehaviour
 
     private bool hasTriggered = false;
 
-    void OnTriggerEnter(Collider other)
+    FlashlightPanel flashlightPanel;
+
+    void Awake()
+    {
+        flashlightPanel = GetComponent<FlashlightPanel>();
+        if (flashlightPanel == null)
+        {
+            flashlightPanel = gameObject.AddComponent<FlashlightPanel>();
+        }
+
+    }
+
+    void OnTriggerEnter(Collider other) { TryActivate(other); }
+    void OnTriggerStay(Collider other) { TryActivate(other); }
+
+    void TryActivate(Collider other)
     {
         // Don't activate again after first use
-        if (hasTriggered)
+        if (hasTriggered || !flashlightPanel.IsIlluminated())
             return;
 
         PlayerStats playerStats = other.GetComponent<PlayerStats>();
